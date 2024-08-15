@@ -1,10 +1,13 @@
 ﻿/*
-3.4.Написать программу, которая решает следующую задачу: 
-«N школьников  делят  k  яблок  поровну  так, чтобы  каждому  до-
-стались только целые яблоки, остальные яблоки остаются в кор-
-зинке. Определить, сколько яблок достанется каждому школьнику 
-и сколько яблок останется в корзинке».
+3.13.	 Дана таблица из 10 строк и 5 столбцов. Определить:
+1)   в какой строке находится значение с порядковым номером 
+n, если нумерацию вести построчно сверху вниз, а в каждой 
+строке – слева направо;
+2)  в какой строке находится это значение.
+
 */
+
+using System.Data;
 
 namespace Practice_ConsoleApps
 {
@@ -12,28 +15,39 @@ namespace Practice_ConsoleApps
     {
         static void Main(string[] args)
         {
-            uint N = 0, k = 0, applesPerPupil;
+            byte rows = 10, columns = 5, n = 0;
+            CheckInput("Введите порядковый номер от 1 до 50: ", ref n);
+            GetPositionInTable(n, rows, columns, out byte row, out byte col);
 
-            CheckInput("Количество школьников N = ", ref N);
-            CheckInput("Число яблок в корзине k = ", ref k);
+            Console.WriteLine($"Значение с порядковым номером {n} " +
+                $"находится в {row} строке и в {col} столбце");
 
-            applesPerPupil = k / N;
-
-            Console.WriteLine($"Каждому школьнику достанется по {applesPerPupil} яблок, " +
-                $"в корзине останется {k - applesPerPupil * N} яблок");
+            //testing
+            for (byte i = 1; i <= 50; i++)
+            {
+                GetPositionInTable(i, rows, columns, out row, out col);
+                Console.WriteLine($"Значение с порядковым номером {i} " +
+                    $"находится в {row} строке и в {col} столбце");
+            }
         }
-        static void CheckInput(string message, ref uint var)
+        static void CheckInput(string message, ref byte var)
         {
             while (true)
             {
                 Console.Write(message);
-                if (!uint.TryParse(Console.ReadLine(), out var))
+                if (!byte.TryParse(Console.ReadLine(), out var) || var < 1 || var > 50)
                 {
                     Console.WriteLine("Ошибка ввода, попробуйте снова\n");
                     continue;
                 }
                 break;
             }
+        }
+
+        static void GetPositionInTable(byte numberInTable, byte rows, byte columns, out byte row, out byte col)
+        {
+            row = (byte)Math.Ceiling((double)numberInTable / columns);
+            col = (byte)(numberInTable - (row - 1) * columns);
         }
     }
 }
